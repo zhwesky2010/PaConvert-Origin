@@ -6,6 +6,7 @@ Paddleconverter是一款工具，其功能是将Pytorch项目训练代码从转�
 转换逻辑为静态代码扫描，保持原代码的风格与结构不变，只转换相应的Pytorch API，其他Python代码保持原样不变。
 
 转换采用非inplace的方式，不修改原文件，将原Pytorch项目文件一一转换到 `out_dir` 指定的文件夹中：
+
 - Python文件，逐个转换
 - requirements.txt 转换其中的 torch 安装依赖
 - 其他文件，原样拷贝
@@ -26,12 +27,12 @@ perm_0[0] = 1
 y = paddle.transpose(x, perm_0)
 ```
 
-这是由于两者对应API的用法有差异，因此无法通过一行完成，将增加若干行Paddle API实现相同功能。
+这是由于两者API的用法差异，无法通过一行完成，必须增加若干行来实现相同功能。
 
 
-所有的API转换依据 [Pytorch-Paddle API映射表](https://www.paddlepaddle.org.cn/documentation/docs/zh/guides/model_convert/pytorch_api_mapping_cn.html#pytorch-1-8-paddle-2-0-api)
+所有的API转换是依据 [Pytorch-Paddle API映射表](https://www.paddlepaddle.org.cn/documentation/docs/zh/guides/model_convert/pytorch_api_mapping_cn.html#pytorch-1-8-paddle-2-0-api) 来进行的。
 
-转换完成后，将打印总数、成功、失败的转换结果，对于无法转换的Pytorch API，会通过 >>> 在行前进行标识，需要进行手动修改并删除标记才可运行。
+在转换完成后，Pytorch API总数、成功、失败数量统计将会打印到终端，对于无法转换的Pytorch API，我们会通过 >>> 在代码行前面进行标识，你需要手动修改并删除该标记。
 
 
 # 安装
@@ -74,38 +75,58 @@ paddleconverter --in_dir torch_project --out_dir paddle_project --log_dir log_di
 
 # 简单示例
 
-以以下API调用为例：
+以下API为例：
 ```
 import torch
+import torch.nn as nn
+import torch.optim as optim
+import torch.nn.Linear as Linear
+import torch.nn.functional as F
 
-torch.reshape(torch.add(torch.abs(m), n), [3])
+class MyNet(nn.Module):
+    test = "str"
 
-torch.reshape(torch.add(m.abs(), n), [3])
+    def __init__(self):
+        self._fc1 = torch.nn.Linear(10, 10)
+        self._fc2 = nn.Linear(10, 10)
+        self._fc3 = Linear(10, 10)
 
-torch.reshape(torch.abs(m).add(n), [3])
+    @torch.no_grad()
+    def forward(self, x):
+        x = self._fc1(x)
+        x = self._fc2(x)
+        x = self._fc3(x)
+        y = torch.add(x, x)
+        return F.relu(y)
 
-torch.add(torch.abs(m), n).reshape([3])
-
-torch.abs(m).add(n).reshape([3])
-
-torch.add(m.abs(), n).reshape([3])
-
-torch.reshape(m.abs().add(n), [3])
-
-m.abs().add(n).reshape([3])
+net = MyNet()
+sgd = optim.SGD(net.parameters(), lr=0.1, momentum=0.9)
 ```
 
 转换完成后：
 ```
+""" This file has been converted by Paddle converter, thanks to use, you can remove this mark"""
 import paddle
-paddle.reshape(x=paddle.add(x=paddle.abs(x=m), y=n), shape=[3])
-paddle.reshape(x=paddle.add(x=m.abs(), y=n), shape=[3])
-paddle.reshape(x=paddle.abs(x=m).add(y=n), shape=[3])
-paddle.add(x=paddle.abs(x=m), y=n).reshape(shape=[3])
-paddle.abs(x=m).add(y=n).reshape(shape=[3])
-paddle.add(x=m.abs(), y=n).reshape(shape=[3])
-paddle.reshape(x=m.abs().add(y=n), shape=[3])
-m.abs().add(y=n).reshape(shape=[3])
+
+
+class MyNet(paddle.nn.Layer):
+    test = 'str'
+
+    def __init__(self):
+        self._fc1 = paddle.nn.Linear(in_features=10, out_features=10)
+        self._fc2 = paddle.nn.Linear(in_features=10, out_features=10)
+        self._fc3 = paddle.nn.Linear(in_features=10, out_features=10)
+
+    @paddle.no_grad()
+    def forward(self, x):
+        x = self._fc1(x)
+        x = self._fc2(x)
+        x = self._fc3(x)
+        y = paddle.add(x=x, y=x)
+        return paddle.nn.functional.relu(x=y)
+
+net = MyNet()
+>>> sgd = torch.optim.SGD(net.parameters(), lr=0.1, momentum=0.9)
 ```
 
 打印信息如下：
@@ -114,29 +135,35 @@ m.abs().add(y=n).reshape(shape=[3])
 ======================================
 Convert Summary:
 ======================================
-There are 24 Pytorch APIs in this Project:
- 24  Pytorch APIs have been converted to Paddle successfully!
- 0  Pytorch APIs are converted failed!
- Convert Rate is: 100.00%
+There are 8 Pytorch APIs in this Project:
+ 7  Pytorch APIs have been converted to Paddle successfully!
+ 1  Pytorch APIs are converted failed!
+ Convert Rate is: 85.70%
 
 Thank you to use Paddle Convert tool. You can make any suggestions to us.
 ```
 
-一共有24个torch API被转换，因为上述每行 `torch.reshape(torch.add(torch.abs(m), n), [3])` 是包含连续3层的API调用，计作3个API。
+一共有8个torch API，其中7个被成功转换，转换率为85.7%。
 
-转换完成后，将补全参数关键字信息、移除注释、多余空格。因为语法树转换为源码时，将采用标准写法来生成代码，这会使得与原来行数有一些差异。
+成功转换的API，将 补全API全名、参数关键字、移除注释、移除多余空行。因为语法树转换为源码时，将采用标准写法来生成代码，这会使得与原来行数有一些差异。
+
+对于未成功转换的API，将 补全torch API全名，同时在行前通过 `>>>` 的形式加以标注，用户必须对该torch API进行手动转换，并删除标注。
 
 
 # 贡献代码
 
-根据API转换关系，我们将API分为两大类：
+欢迎你向我们贡献代码。
+
+根据API转换关系，我们将API分为三大类：
 - 一致的API：要求API功能一致，且API参数一致（如果Pytorch较Paddle多out/dtype/device/layout/requires_grad/memory_format/inplace/generator/pin_memory参数，则也视作一致），通过一对一即可实现
 
 - 不一致但可转换的API：包含Pytorch参数更多、参数不一致、API功能不一致、组合实现这几种情况，可以通过多行、多个API来实现，实现一对多的转换
 
 - 不一致且无法转换的API：无法转换
 
-欢迎你向我们贡献代码，对于 **一致的API** 目前通过json管理，你可以修改 paddleconverter/api_mapping.json，并补充以下信息：
+## 1. **一致的API** 
+
+仅需修改 paddleconverter/api_mapping.json，并补充以下信息：
 
 ```python
 "torch.nn.AvgPool2d": {
@@ -162,7 +189,9 @@ Thank you to use Paddle Convert tool. You can make any suggestions to us.
 - `kwargs_change` :参数名的对应关系（注: 参数功能一致仅名字不一致时也视作一致）
 
 
-对于 **不一致的API**，需要在 paddleconverter/api_matcher.py 中逐个增加 **Matcher** ，并重写 `generate_code` 函数 ，以`torch.transpose`为例：
+## 2. **不一致的API**
+
+首先需要在 paddleconverter/api_matcher.py 中逐个增加 **Matcher** ，并重写 `generate_code` 函数 ，以`torch.transpose`为例：
 
 ```
 
@@ -184,7 +213,7 @@ class TransposeMatcher(BaseMatcher):
         return code
 ```
 
-然后在 paddleconverter/api_mapping.json 中增加json配置：
+然后根据 paddleconverter/api_mapping.json 中增加 json配置：
 
 ```
 "torch.transpose" : {
