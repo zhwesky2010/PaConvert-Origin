@@ -5,7 +5,7 @@ import torch.nn
 
 import torch.nn as nn, six as s
 
-from torch.nn import functional as F, init as i
+from torch.nn import functional as F, init as I
 
 from torch.nn import Module, Linear
 
@@ -134,3 +134,17 @@ torch.nn.GELU(approximate='none')
 F.gelu(x, approximate='none')
 
 y = F.gelu(x, approximate='none')
+
+size = x.size()
+
+shape = x.shape
+
+device = x.device
+
+dtype = x.dtype
+
+y = torch.abs(x).T
+
+shape = torch.abs(x).shape
+
+torch.abs(x).shape
