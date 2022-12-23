@@ -21,7 +21,8 @@
   },
 
   "torch.nn.Identity" : {
-    "Matcher": "IdentityMatcher"
+    "Matcher": "IdentityMatcher",
+    "paddle_api": "paddle.nn.Identity"
   },
 
   "torch.linalg.matmul" : {
@@ -127,7 +128,7 @@
   },
 
   "torch.Tensor.reshape": {
-    "Matcher": "GenericMatcher",
+    "Matcher": "TensorReshapeMatcher",
     "paddle_api": "paddle.Tensor.reshape",
     "args_list" : ["shape"]
   },
@@ -142,6 +143,12 @@
   },
 
   "torch.Tensor.transpose": {
+    "Matcher": "TensorTransposeMatcher",
+    "paddle_api": "paddle.Tensor.transpose",
+    "args_list" : [
+      "dim0", 
+      "dim1"
+   ]
   },
 
   "torch.no_grad": {
@@ -155,7 +162,7 @@
   },
 
   "torch.Tensor": {
-    "Matcher": "GenericMatcher",
+    "Matcher": "TensorMatcher",
     "paddle_api": "paddle.Tensor"
   },
 
@@ -167,6 +174,16 @@
   "torch.float16": {
     "Matcher": "GenericMatcher",
     "paddle_api": "'float16'"
+  },
+
+  "torch.half": {
+    "Matcher": "GenericMatcher",
+    "paddle_api": "'float16'"
+  },
+
+  "torch.bfloat16": {
+    "Matcher": "GenericMatcher",
+    "paddle_api": "'bfloat16'"
   },
 
   "torch.uint16": {
@@ -184,7 +201,7 @@
     "paddle_api": "'float32'"
   },
 
-  "torch.flaot64": {
+  "torch.float64": {
     "Matcher": "GenericMatcher",
     "paddle_api": "'float64'"
   },
@@ -204,12 +221,27 @@
     "paddle_api": "'int16'"
   },
 
+  "torch.short": {
+    "Matcher": "GenericMatcher",
+    "paddle_api": "'int16'"
+  },
+
   "torch.int32": {
     "Matcher": "GenericMatcher",
     "paddle_api": "'int32'"
   },
 
+  "torch.int": {
+    "Matcher": "GenericMatcher",
+    "paddle_api": "'int32'"
+  },
+
   "torch.int64": {
+    "Matcher": "GenericMatcher",
+    "paddle_api": "'int64'"
+  },
+
+  "torch.long": {
     "Matcher": "GenericMatcher",
     "paddle_api": "'int64'"
   },
@@ -224,7 +256,17 @@
     "paddle_api": "'complex64'"
   },
 
+  "torch.cfloat": {
+    "Matcher": "GenericMatcher",
+    "paddle_api": "'complex64'"
+  },
+
   "torch.complex128": {
+    "Matcher": "GenericMatcher",
+    "paddle_api": "'complex128'"
+  },
+
+  "torch.cdouble": {
     "Matcher": "GenericMatcher",
     "paddle_api": "'complex128'"
   },
@@ -3364,7 +3406,8 @@
       "dilation",
       "groups"],
     "kwargs_change": {
-      "input":"x"
+      "input":"x",
+      "out":"out"
     }
   },
 
@@ -4338,6 +4381,13 @@
     "Matcher": "GenericMatcher",
     "paddle_api": "paddle.Tensor.is_leaf"
   },
+  "torch.Tensor.is_sparse": {}, 
+  "torch.Tensor.requires_grad": {}, 
+  "torch.Tensor.new_tensor": {}, 
+  "torch.Tensor.new_full": {}, 
+  "torch.Tensor.new_empty": {}, 
+  "torch.Tensor.new_ones": {}, 
+  "torch.Tensor.new_zeros": {}, 
 
   "torch.Tensor.abs": {
     "Matcher": "GenericMatcher",
@@ -4499,7 +4549,7 @@
     "Matcher": "GenericMatcher",
     "paddle_api": "paddle.Tensor.asin"
   },
-
+  
   "torch.Tensor.atan" : {
     "Matcher": "GenericMatcher",
     "paddle_api": "paddle..Tensor.atan"
