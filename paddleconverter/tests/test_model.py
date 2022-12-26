@@ -11,6 +11,10 @@ from torch.nn import Module, Linear
 
 from torch import add, Tensor
 
+from io import open
+
+from . import functional_pil as F_pil, functional_tensor as F_t
+
 class MyNet(nn.Module):
     test = "str"
 
@@ -44,15 +48,16 @@ def func2(x) -> torch.Tensor:
     return torch.abs(x)
 
 def func3(x: torch.Tensor) -> torch.Tensor:
-    def func5():
+    def func5(x):
         return torch.transpose(x, 1, 0)
 
     return torch.abs(x)
 
 if x > 1:
-    print("true")
+    y = x.transpose(0, 1)
 else:
-    print("false")
+    z = x.transpose(0, 1)
+
 
 def func4(x: Tensor=None) -> torch.Tensor:
     if isinstance(x, torch.Tensor):
@@ -116,6 +121,11 @@ model = nn.Sequential(OrderedDict([
           ('relu2', nn.ReLU())
         ]))
 
+blocks = []
+blocks.append(('block1', torch.nn.Linear(10, 10)))
+blocks.append(('block2', torch.nn.Linear(10, 10)))
+nn.Sequential(OrderedDict(blocks))
+
 # container
 linears = nn.ModuleList([nn.Linear(10, 10) for i in range(10)])
 
@@ -135,8 +145,14 @@ F.gelu(x, approximate='none')
 
 y = F.gelu(x, approximate='none')
 
+# torch.Tensor.size()
 size = x.size()
 
+size = torch.abs(x, out=y).size()
+
+x.abs().size()
+
+# torch.Tensor.Attribute
 shape = x.shape
 
 device = x.device
@@ -148,3 +164,109 @@ y = torch.abs(x).T
 shape = torch.abs(x).shape
 
 torch.abs(x).shape
+
+# different kinds of torch.Tensor method 
+z = (torch.triu(torch.ones(sz, sz)) == 1).abs()
+
+(x + y).abs()
+
+(x == y).abs()
+
+(-x).abs()
+
+
+# torch.Tensor.reshape(*shape)
+
+x.reshape(2, 3)
+
+x.reshape([2, 2])
+
+x.reshape(shape=[2, 3])
+
+
+# torch.max/min
+torch.max(image)
+
+torch.max(image, dim=1)
+
+torch.max(image, label)
+
+torch.min(image)
+
+torch.min(image, dim=1)
+
+torch.min(image, label)
+
+
+# torch.rand
+m = 2
+n = 3
+
+torch.rand(m, n)
+
+torch.randn(2+3, 3, out = y)
+
+torch.zeros(m+n, n, out = y, dtype=torch.float32, requires_grad=True)
+
+torch.ones(2, 3, requires_grad=False)
+
+torch.empty(m, n, pin_memory=True)
+
+torch.full(2, 3, device=torch.device('cpu'), pin_memory=False)
+
+torch.rand(2, 3)
+
+torch.rand((2, 3))
+
+torch.rand([2, 3])
+
+torch.rand(size=(2, 3))
+
+torch.rand(size=[2, 3])
+
+torch.rand(())
+
+
+torch.rand([])
+
+# torch.Tensor.size
+torch.abs(x).size()
+
+torch.abs(x).size(2)
+
+x.size()
+
+x.size(0)
+
+
+# torch.Tensor.item
+torch.abs(x).item()
+
+x.item()
+
+# requires_grad / requires_grad_
+assert not label.requires_grad
+
+label_requires_grad = label.requires_grad_(True)
+label = label.requires_grad_(False)
+
+requires_grad = [True, False]
+
+label.requires_grad_(requires_grad[1])
+
+assert label.requires_grad
+assert label_requires_grad.requires_grad
+
+# torch.einsum
+torch.einsum("...ijk, ...xijk -> ...xjk", mask, a4)
+
+# if scope insert
+if pic.mode == '1':
+    img = 255 * img
+
+if pic.mode == '1':
+    img = 255 * img
+
+
+return torch.from_numpy(nppic).to(dtype=default_float_dtype)
+
