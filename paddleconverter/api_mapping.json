@@ -6061,7 +6061,9 @@
   "torch.Tensor.ravel": {}, 
   "torch.Tensor.record_stream": {}, 
   "torch.Tensor.renorm_": {}, 
-  "torch.Tensor.repeat": {}, 
+  "torch.Tensor.repeat": {
+    "Matcher": "TensorRepeatMatcher"
+  }, 
   "torch.Tensor.repeat_interleave": {}, 
   "torch.Tensor.requires_grad_": {
     "Matcher": "TensorRequiresGradMatcher",
@@ -6140,7 +6142,9 @@
   "torch.Tensor.unique": {}, 
   "torch.Tensor.values": {}, 
   "torch.Tensor.vdot": {}, 
-  "torch.Tensor.view": {}, 
+  "torch.Tensor.view": {
+    "Matcher": "TensorViewMatcher"
+  }, 
   "torch.Tensor.view_as": {}, 
   "torch.Tensor.xlogy": {}, 
   "torch.Tensor.xlogy_": {}, 
