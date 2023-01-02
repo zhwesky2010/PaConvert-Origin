@@ -55,19 +55,21 @@
 
   "torch.max" : {
     "Matcher": "MaxMinMatcher",
-    "paddle_api": "paddle.max",
-    "args_list" : ["input"],
+    "paddle_api": "paddle.maximum",
+    "args_list" : ["input", "other"],
     "kwargs_change": {
-      "input": "x"
+      "input": "x",
+      "other": "y"
     }
   },
 
   "torch.min" : {
     "Matcher": "MaxMinMatcher",
     "paddle_api": "paddle.minimum",
-    "args_list" : ["input"],
+    "args_list" : ["input", "other"],
     "kwargs_change": {
-      "input": "x"
+      "input": "x",
+      "other": "y"
     }
   },
 
@@ -2402,7 +2404,8 @@
     "args_list" : [
       "p",
       "dim",
-      "maxnorm"],
+      "maxnorm",
+      "out"],
     "kwargs_change": {
       "dim":"axis"
     }
@@ -2733,6 +2736,18 @@
       "input",
       "vec",
       "out"],
+    "kwargs_change": {
+      "input":"x"
+    }
+  },
+
+
+  "torch.pinverse" : {
+    "Matcher": "GenericMatcher",
+    "paddle_api": "paddle.linalg.pinv",
+    "args_list" : [
+      "input",
+      "rcond"],
     "kwargs_change": {
       "input":"x"
     }
@@ -3120,6 +3135,16 @@
       "threshold"]
   },
 
+  "torch.nn.Softshrink" : {
+    "Matcher": "GenericMatcher",
+    "paddle_api": "paddle.nn.Softshrink",
+    "args_list" : [
+      "lambd"],
+    "kwargs_change": {
+      "lambd":"threshold"
+    }
+  },
+
   "torch.nn.Softsign" : {
     "Matcher": "GenericMatcher",
     "paddle_api": "paddle.nn.Softsign"
@@ -3278,7 +3303,7 @@
 
   "torch.nn.UpsamplingBilinear2d" : {
     "Matcher": "GenericMatcher",
-    "paddle_api": "paddle.nn.UpsamplingBilinear2d",
+    "paddle_api": "paddle.nn.UpsamplingBilinear2D",
     "args_list" : [
       "size",
       "scale_factor"]
@@ -3449,8 +3474,7 @@
       "dilation",
       "groups"],
     "kwargs_change": {
-      "input":"x",
-      "out":"out"
+      "input":"x"
     }
   },
 
@@ -4782,7 +4806,7 @@
     "args_list" : [
       "dim",
       "dtype"],
-      "kwargs_change": {
+    "kwargs_change": {
         "dim":"axis"
       }
   }, 
@@ -6100,6 +6124,7 @@
     "Matcher": "TensorRequiresGradMatcher",
     "args_list": ["requires_grad"]
   }, 
+  "torch.Tensor.reshape": {}, 
   "torch.Tensor.reshape_as": {}, 
   "torch.Tensor.resize_": {}, 
   "torch.Tensor.resize_as_": {}, 
@@ -6180,7 +6205,6 @@
   }, 
   "torch.Tensor.unfold": {}, 
   "torch.Tensor.unique": {}, 
-  "torch.Tensor.values": {}, 
   "torch.Tensor.vdot": {}, 
   "torch.Tensor.view": {
     "Matcher": "TensorViewMatcher"

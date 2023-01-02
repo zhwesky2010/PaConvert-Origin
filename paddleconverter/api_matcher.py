@@ -168,7 +168,7 @@ class ToTensorMatcher(BaseMatcher):
 
         if 'requires_grad' in kwargs:
             requires_grad_v = kwargs.pop('requires_grad')
-            code = 'paddle.to_tensor({}, stop_gradient = {})'.format(self.kwargs_to_str(kwargs), not requires_grad_v)
+            code = 'paddle.to_tensor({}, stop_gradient = not {})'.format(self.kwargs_to_str(kwargs), requires_grad_v)
         else:
             code = 'paddle.to_tensor({})'.format(self.kwargs_to_str(kwargs))
 
@@ -189,7 +189,7 @@ class TransposeMatcher(BaseMatcher):
             {} = list(range(len({}.shape)))
             {}[{}] = {}
             {}[{}] = {}
-            paddle.transpose({}, {})
+            paddle.transpose(x={}, perm={})
             '''
         )
         perm = get_unique_name('perm')
@@ -324,15 +324,15 @@ class PadMatcher(BaseMatcher):
 
 class MaxMinMatcher(BaseMatcher):
     def get_paddle_nodes(self, args, kwargs):
-        call_maximum = False
+        call_maximinimum = False
         if len(args) > 1 and isinstance(args[1], ast.Name):
-            call_maximum = True
+            call_maximinimum = True
         
         kwargs = self.parse_kwargs(kwargs)
         if 'other' in kwargs:
-            call_maximum = True
+            call_maximinimum = True
         
-        if call_maximum:
+        if call_maximinimum:
             return GenericMatcher(self.torch_api, self.api_mapping).get_paddle_nodes(args, kwargs)
 
         # return (values, indices) and paddle not implement
@@ -341,13 +341,13 @@ class MaxMinMatcher(BaseMatcher):
         if 'dim' in kwargs:
             return None
 
-        # only return values
+        # only return values, not return indices
         if 'input' in kwargs:
             x_v = astor.to_source(kwargs['input']).strip('\n')
         else:
             x_v = astor.to_source(args[0]).strip('\n')
 
-        code = 'paddle.max({})'.format(x_v)
+        code = 'paddle.max(x={})'.format(x_v)
         return ast.parse(code).body
 
 
@@ -377,7 +377,7 @@ class TensorTransposeMatcher(BaseMatcher):
             {} = list(range(len({}.shape)))
             {}[{}] = {}
             {}[{}] = {}
-            {}.transpose({})
+            {}.transpose(perm={})
             '''
         )
         perm = get_unique_name('perm')
