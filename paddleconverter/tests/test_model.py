@@ -96,11 +96,11 @@ torch.reshape(torch.add(x.abs(), y), [3])
 
 torch.reshape(torch.abs(x).add(y), [3])
 
-torch.add(torch.abs(x), y).reshape([3])
+torch.add(torch.abs(x), y).reshape(3)
 
-torch.abs(x).add(y).reshape([3])
+torch.abs(x).add(y).reshape(3)
 
-torch.add(x.abs(), y).reshape([3])
+torch.add(x.abs(), y).reshape(3)
 
 torch.reshape(x.abs().add(y), [3])
 
@@ -151,6 +151,11 @@ size = x.size()
 size = torch.abs(x, out=y).size()
 
 x.abs().size()
+
+## NonTensor
+x.size[2]
+## Tensor
+x.shape[2]
 
 # torch.Tensor.Attribute
 shape = x.shape
@@ -352,3 +357,28 @@ torch.tensor(1., device=torch.device('cuda:1'))
 torch.tensor(1., device='cuda')
 
 torch.tensor(1., device='cuda:1')
+
+
+# black list, not convert
+import numpy as np
+
+from np import array
+
+np.add(x, y)
+array(1.).abs().add(y)
+
+
+# mark unspport
+torch.test(x)
+( array(1.) + torch.test(x).numpy()).abs()
+( array(1.)-torch.test(x).numpy()).abs()
+( array(1.)*torch.test(x).numpy()).abs()
+"_torch.npy"
+str1="_torch.npy"
+str2='_torch.npy'
+hellotorch.test
+
+## should mark
+torch.save('torch.parma')
+## not mark
+np.save('torch.parma')
