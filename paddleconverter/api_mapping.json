@@ -4723,7 +4723,10 @@
     "paddle_api": "paddle.Tensor.ceil"
   }, 
 
-  "torch.Tensor.ceil_": {}, 
+  "torch.Tensor.ceil_": {
+    "Matcher": "GenericMatcher",
+    "paddle_api": "paddle.Tensor.ceil_"
+  }, 
 
   "torch.Tensor.cholesky": {
     "Matcher": "GenericMatcher",
