@@ -65,7 +65,7 @@ class ImportTransformer(BaseTransformer):
         1. remove from torch import nn
         2. remove from torch import nn.functional as F
         '''
-        # from . import Net
+        # from . import Net (node.module is None)
         if node.module:
             if 'torch.' in node.module or 'torch' == node.module:
                 self.import_paddle = True
@@ -95,6 +95,9 @@ class ImportTransformer(BaseTransformer):
         eg.
             nn.Module -> torch.nn.Module
         '''
+        if isinstance(node.value, (ast.Call, ast.Compare, ast.BinOp, ast.UnaryOp, ast.Subscript)):
+            super(ImportTransformer, self).generic_visit(node)
+
         torch_api = self.get_full_api_from_node(node)
         if torch_api:
             return ast.parse(torch_api).body[0].value
