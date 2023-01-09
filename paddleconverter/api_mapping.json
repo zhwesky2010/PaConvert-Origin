@@ -6543,6 +6543,248 @@
     }
   },
 
+  "torch.fft.fft" : {
+    "Matcher": "GenericMatcher",
+    "paddle_api": "paddle.fft.fft",
+    "args_list" : [
+      "input",
+      "n",
+      "dim",
+      "norm",
+      "out"],
+    "kwargs_change": {
+      "input": "x",
+      "dim":"axis"
+    }
+  },
+
+  "torch.fft.ifft" : {
+    "Matcher": "GenericMatcher",
+    "paddle_api": "paddle.fft.ifft",
+    "args_list" : [
+      "input",
+      "n",
+      "dim",
+      "norm",
+      "out"],
+    "kwargs_change": {
+      "input": "x",
+      "dim":"axis"
+    }
+  },
+
+  "torch.fft.fft2" : {
+    "Matcher": "GenericMatcher",
+    "paddle_api": "paddle.fft.fft2",
+    "args_list" : [
+      "input",
+      "s",
+      "dim",
+      "norm",
+      "out"],
+    "kwargs_change": {
+      "input": "x",
+      "dim":"axes"
+    }
+  },
+
+  "torch.fft.ifft2" : {
+    "Matcher": "GenericMatcher",
+    "paddle_api": "paddle.fft.ifft2",
+    "args_list" : [
+      "input",
+      "s",
+      "dim",
+      "norm",
+      "out"],
+    "kwargs_change": {
+      "input": "x",
+      "dim":"axes"
+    }
+  },
+
+  "torch.fft.fftn" : {
+    "Matcher": "GenericMatcher",
+    "paddle_api": "paddle.fft.fftn",
+    "args_list" : [
+      "input",
+      "s",
+      "dim",
+      "norm",
+      "out"],
+    "kwargs_change": {
+      "input": "x",
+      "dim":"axes"
+    }
+  },
+
+  "torch.fft.ifftn" : {
+    "Matcher": "GenericMatcher",
+    "paddle_api": "paddle.fft.ifftn",
+    "args_list" : [
+      "input",
+      "s",
+      "dim",
+      "norm",
+      "out"],
+    "kwargs_change": {
+      "input": "x",
+      "dim":"axes"
+    }
+  },
+
+  "torch.fft.rfft" : {
+    "Matcher": "GenericMatcher",
+    "paddle_api": "paddle.fft.rfft",
+    "args_list" : [
+      "input",
+      "n",
+      "dim",
+      "norm",
+      "out"],
+    "kwargs_change": {
+      "input": "x",
+      "dim":"axis"
+    }
+  },
+
+  "torch.fft.irfft" : {
+    "Matcher": "GenericMatcher",
+    "paddle_api": "paddle.fft.irfft",
+    "args_list" : [
+      "input",
+      "n",
+      "dim",
+      "norm",
+      "out"],
+    "kwargs_change": {
+      "input": "x",
+      "dim":"axis"
+    }
+  },
+
+  "torch.fft.rfft2" : {
+    "Matcher": "GenericMatcher",
+    "paddle_api": "paddle.fft.rfft2",
+    "args_list" : [
+      "input",
+      "s",
+      "dim",
+      "norm",
+      "out"],
+    "kwargs_change": {
+      "input": "x",
+      "dim":"axes"
+    }
+  },
+
+  "torch.fft.irfft2" : {
+    "Matcher": "GenericMatcher",
+    "paddle_api": "paddle.fft.irfft2",
+    "args_list" : [
+      "input",
+      "s",
+      "dim",
+      "norm",
+      "out"],
+    "kwargs_change": {
+      "input": "x",
+      "dim":"axes"
+    }
+  },
+
+  "torch.fft.rfftn" : {
+    "Matcher": "GenericMatcher",
+    "paddle_api": "paddle.fft.rfftn",
+    "args_list" : [
+      "input",
+      "s",
+      "dim",
+      "norm",
+      "out"],
+    "kwargs_change": {
+      "input": "x",
+      "dim":"axes"
+    }
+  },
+
+  "torch.fft.irfftn" : {
+    "Matcher": "GenericMatcher",
+    "paddle_api": "paddle.fft.irfftn",
+    "args_list" : [
+      "input",
+      "s",
+      "dim",
+      "norm",
+      "out"],
+    "kwargs_change": {
+      "input": "x",
+      "dim":"axes"
+    }
+  },
+
+  "torch.fft.hfft" : {
+    "Matcher": "GenericMatcher",
+    "paddle_api": "paddle.fft.hfft",
+    "args_list" : [
+      "input",
+      "n",
+      "dim",
+      "norm",
+      "out"],
+    "kwargs_change": {
+      "input": "x",
+      "dim":"axis"
+    }
+  },
+
+  "torch.fft.ihfft" : {
+    "Matcher": "GenericMatcher",
+    "paddle_api": "paddle.fft.ihfft",
+    "args_list" : [
+      "input",
+      "n",
+      "dim",
+      "norm",
+      "out"],
+    "kwargs_change": {
+      "input": "x",
+      "dim":"axis"
+    }
+  },
+
+  "torch.fft.fftfreq" : {
+    "Matcher": "GenericMatcher",
+    "paddle_api": "paddle.fft.fftfreq",
+    "args_list" : [
+      "n",
+      "d",
+      "dtype",
+      "layout",
+      "device",
+      "requires_grad"],
+    "kwargs_change": {
+      "input": "x",
+      "dim":"axis"
+    }
+  },
+
+  "torch.fft.rfftfreq" : {
+    "Matcher": "GenericMatcher",
+    "paddle_api": "paddle.fft.rfftfreq",
+    "args_list" : [
+      "n",
+      "d",
+      "dtype",
+      "layout",
+      "device",
+      "requires_grad"],
+    "kwargs_change": {
+      "input": "x",
+      "dim":"axis"
+    }
+  },
+
   "torch.optim.Optimizer.state_dict" : {
     "Matcher": "GenericMatcher",
     "paddle_api": "paddle.optimizer.Optimizer.state_dict"
