@@ -531,7 +531,7 @@
   
   "torch.cat" : {
     "Matcher": "GenericMatcher",
-    "paddle_api": "paddle.conat",
+    "paddle_api": "paddle.concat",
     "args_list" : ["tensors", "dim", "out"],
     "kwargs_change": {
       "tensors": "x",
@@ -632,21 +632,6 @@
       "input":"x"
     }
   },
-    
-  
-  "torch.split" : {
-    "Matcher": "GenericMatcher",
-    "paddle_api": "paddle.split",
-    "args_list" : [
-      "tensor",
-      "split_size_or_sections",
-      "dim"],
-    "kwargs_change": {
-      "tensor":"x",
-      "split_size_or_sections":"num_or_sections",
-      "dim":"axis"
-    }
-  }, 
   
   "torch.squeeze" : {
     "Matcher": "GenericMatcher",
@@ -4841,13 +4826,7 @@
 
   "torch.Tensor.detach": {
     "Matcher": "GenericMatcher",
-    "paddle_api": "paddle.Tensor.cumsum",
-    "args_list" : [
-      "dim",
-      "dtype"],
-      "kwargs_change": {
-        "dim":"axis"
-      }
+    "paddle_api": "paddle.Tensor.detach"
   }, 
   
   "torch.Tensor.diag_embed": {
@@ -6198,9 +6177,7 @@
   "torch.Tensor.unfold": {}, 
   "torch.Tensor.unique": {}, 
   "torch.Tensor.vdot": {}, 
-  "torch.Tensor.view": {
-    "Matcher": "TensorViewMatcher"
-  }, 
+  "torch.Tensor.view": {}, 
   "torch.Tensor.view_as": {}, 
   "torch.Tensor.xlogy": {}, 
   "torch.Tensor.xlogy_": {}, 
@@ -6309,10 +6286,7 @@
   "torch.Tensor.index_put_": {},
   "torch.Tensor.index_put": {},
   "torch.Tensor.indices": {},
-  "torch.Tensor.int": {
-    "Matcher": "TensorIntMatcher",
-    "args_list": ["memory_format"]
-  },
+  "torch.Tensor.int": {},
   "torch.Tensor.int_repr": {},
   "torch.Tensor.isposinf": {},
   "torch.Tensor.isneginf": {},
@@ -6376,17 +6350,6 @@
   "torch.Tensor.coalesce": {},
   "torch.Tensor.take_along_dim": {},
   "torch.Tensor.sparse_resize_and_clear_": {},
-
-  "torch.tensor": {
-    "Matcher": "ToTensorMatcher",
-    "paddle_api": "paddle.to_tensor",
-    "args_list" : [
-      "data", 
-      "dtype", 
-      "device", 
-      "pin_memory", 
-      "requires_grad"]
-  },
 
   "torch.transpose" : {
     "Matcher": "TransposeMatcher",
