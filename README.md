@@ -1,4 +1,4 @@
-## 该项目已整体迁移到飞桨官方Organization下，请移步关注https://github.com/PaddlePaddle/PaConvert
+### 该项目已整体迁移到飞桨官方Organization下，请关注 https://github.com/PaddlePaddle/PaConvert
 
 # 概述
 PaConvert是一个代码转换工具，能自动将使用其它深度学习框架训练或推理的代码转换为使用PaddlePaddle的代码，方便代码迁移，更好地使用PaddlePaddle的特性。
